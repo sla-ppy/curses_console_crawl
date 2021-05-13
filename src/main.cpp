@@ -1,7 +1,7 @@
 #include <ncurses.h>
-#include <string.h>
+#include <cstring>
 
-// inserting example from the manual
+// inserting example from the manual to test, lol
 void testExample() {
     char msg[] = "Just a string";        /* message to be appeared on the screen */
     int row, col;                /* to store the number of rows and *
@@ -15,40 +15,6 @@ void testExample() {
     refresh();
     getch();
     endwin();
-}
-
-// awful code
-// basically tried to use std::vector to always be able to change the message and constantly resize the window at the same time, didn't work
-void resizeTest() {
-    char msg[] = "Hi, I am the center of the terminal."; // msg to appear on screen
-    int row, col;
-
-    getmaxyx(stdscr, col, row); // get number of rows and cols
-
-    if (row > 20 && col > 10) {
-        mvprintw(row / 2, (col - strlen(msg)) / 2, "%s", msg);
-        mvprintw(row - 2, 0, "This screen has %d rows and %d columns\n", row, col);
-        printw("Try resizing your window(if possible) and then run this program again");
-        refresh();
-    }
-    if (row > 40 && col > 20) {
-        mvprintw(row / 2, (col - strlen(msg)) / 2, "%s", msg);
-        mvprintw(row - 2, 0, "This screen has %d rows and %d columns\n", row, col);
-        printw("Try resizing your window(if possible) and then run this program again");
-        refresh();
-    }
-    if (row > 60 && col > 30) {
-        mvprintw(row / 2, (col - strlen(msg)) / 2, "%s", msg);
-        mvprintw(row - 2, 0, "This screen has %d rows and %d columns\n", row, col);
-        printw("Try resizing your window(if possible) and then run this program again");
-        refresh();
-    }
-    if (row > 80 && col > 40) {
-        mvprintw(row / 2, (col - strlen(msg)) / 2, "%s", msg);
-        mvprintw(row - 2, 0, "This screen has %d rows and %d columns\n", row, col);
-        printw("Try resizing your window(if possible) and then run this program again");
-        refresh();
-    }
 }
 
 bool inputManager() {
@@ -113,7 +79,6 @@ int main() {
     while (terminalIsRunning) {
         refresh(); // updates stdscr so we can see the new outputs
 
-        resizeTest();
         inputManager();
 
         terminalIsRunning = false;
