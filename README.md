@@ -8,7 +8,7 @@ To compile:
 g++ -Wall -Wextra -Wpedantic  -lncurses src/main.cpp -o curses-console-crawl
 ```
 Where:
-* -Wall -Wextra -Wpedantic -> turns on warnings during compilation (if Im correct)
+* -Wall -Wextra -Wpedantic -> turns on warnings during compilation
 * -lcurses -> links the program with ncurses
 * -o curses-console-crawl -> names the generated file curses-console-crawl, also has the capability to place the file in a specific location if you desire
 
