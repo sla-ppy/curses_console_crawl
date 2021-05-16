@@ -1,20 +1,35 @@
 #include <ncurses.h>
 #include <cstring>
 
+/*
+ *  Things Im interested in:
+ *
+ *  1. Print smth to middle of the screen
+ *  2. Be able to resize the console screen while auto-adjusting current screen.
+ *  3. When we reach the current last row, we do clear from the first player input, smth like that. Unsure.
+ *  4. // int ch;
+ *        while((ch = getch()) != KEY_F(1)) {}
+ *
+ *
+ */
+
 // inserting example from the manual to test, lol
 void testExample() {
-    char msg[] = "Just a string";        /* message to be appeared on the screen */
-    int row, col;                /* to store the number of rows and *
-					 * the number of columns of the screen */
-    initscr();                /* start the curses mode */
-    getmaxyx(stdscr, row, col);        /* get the number of rows and columns */
-    mvprintw(row / 2, (col - strlen(msg)) / 2, "%s", msg);
-    /* print the message at the center of the screen */
-    mvprintw(row - 2, 0, "This screen has %d rows and %d columns\n", row, col);
-    printw("Try resizing your window(if possible) and then run this program again");
-    refresh();
-    getch();
-    endwin();
+    start_color();			/* Start color functionality	*/
+
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    printw("A Big string which i didn't care to type fully ");
+    mvchgat(0, 0, -1, A_BLINK, 1, NULL);
+    /*
+     * First two parameters specify the position at which to start
+     * Third parameter number of characters to update. -1 means till
+     * end of line
+     * Forth parameter is the normal attribute you wanted to give
+     * to the character
+     * Fifth is the color index. It is the index given during init_pair()
+     * use 0 if you didn't want color
+     * Sixth one is always NULL
+     */
 }
 
 bool inputManager() {
@@ -78,9 +93,7 @@ int main() {
 
     while (terminalIsRunning) {
         refresh(); // updates stdscr so we can see the new outputs
-
         inputManager();
-
         terminalIsRunning = false;
     }
 
