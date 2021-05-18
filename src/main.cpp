@@ -1,5 +1,4 @@
 #include <ncurses.h>
-#include <cstring>
 
 /*
  *  Things Im interested in:
@@ -13,111 +12,60 @@
  *
  */
 
-// inserting example from the manual to test, lol
-void testExample() {
-    printw("Upper left corner           "); addch(ACS_ULCORNER); printw("\n");
-    printw("Lower left corner           "); addch(ACS_LLCORNER); printw("\n");
-    printw("Lower right corner          "); addch(ACS_LRCORNER); printw("\n");
-    printw("Tee pointing right          "); addch(ACS_LTEE); printw("\n");
-    printw("Tee pointing left           "); addch(ACS_RTEE); printw("\n");
-    printw("Tee pointing up             "); addch(ACS_BTEE); printw("\n");
-    printw("Tee pointing down           "); addch(ACS_TTEE); printw("\n");
-    printw("Horizontal line             "); addch(ACS_HLINE); printw("\n");
-    printw("Vertical line               "); addch(ACS_VLINE); printw("\n");
-    printw("Large Plus or cross over    "); addch(ACS_PLUS); printw("\n");
-    printw("Scan Line 1                 "); addch(ACS_S1); printw("\n");
-    printw("Scan Line 3                 "); addch(ACS_S3); printw("\n");
-    printw("Scan Line 7                 "); addch(ACS_S7); printw("\n");
-    printw("Scan Line 9                 "); addch(ACS_S9); printw("\n");
-    printw("Diamond                     "); addch(ACS_DIAMOND); printw("\n");
-    printw("Checker board (stipple)     "); addch(ACS_CKBOARD); printw("\n");
-    printw("Degree Symbol               "); addch(ACS_DEGREE); printw("\n");
-    printw("Plus/Minus Symbol           "); addch(ACS_PLMINUS); printw("\n");
-    printw("Bullet                      "); addch(ACS_BULLET); printw("\n");
-    printw("Arrow Pointing Left         "); addch(ACS_LARROW); printw("\n");
-    printw("Arrow Pointing Right        "); addch(ACS_RARROW); printw("\n");
-    printw("Arrow Pointing Down         "); addch(ACS_DARROW); printw("\n");
-    printw("Arrow Pointing Up           "); addch(ACS_UARROW); printw("\n");
-    printw("Board of squares            "); addch(ACS_BOARD); printw("\n");
-    printw("Lantern Symbol              "); addch(ACS_LANTERN); printw("\n");
-    printw("Solid Square Block          "); addch(ACS_BLOCK); printw("\n");
-    printw("Less/Equal sign             "); addch(ACS_LEQUAL); printw("\n");
-    printw("Greater/Equal sign          "); addch(ACS_GEQUAL); printw("\n");
-    printw("Pi                          "); addch(ACS_PI); printw("\n");
-    printw("Not equal                   "); addch(ACS_NEQUAL); printw("\n");
-    printw("UK pound sign               "); addch(ACS_STERLING); printw("\n");
-
-    refresh();
-    getch();
-    endwin();
-}
-
-bool inputManager() {
-    int keyInput;
-
-    bool inputBeingManaged{true};
-
-    while (inputBeingManaged) {
-
-        keyInput = getch();
-
-        // how to use F1-12 keys
-        if (keyInput == KEY_F(2)) {
-            printw("Hello!\n"); // print item
-        }
-
-        // basic quit
-        if (keyInput == 'q') {
-            printw("Quitting now...\n");
-            getch();
-            inputBeingManaged = false;
-        }
-
-        // movement prototype
-        // FIXME: interestingly when you scroll up and down, it also works as KEY_UP and KEY_DOWN, why?
-        if (keyInput == KEY_LEFT) {
-            printw("We moved left.\n");
-        }
-        if (keyInput == KEY_RIGHT) {
-            printw("We moved right.\n");
-        }
-        if (keyInput == KEY_UP) {
-            printw("We moved UP.\n");
-        }
-        if (keyInput == KEY_DOWN) {
-            printw("We moved down.\n");
-        }
-
-        // test example
-        if (keyInput == 't') {
-            testExample();
-        }
-    }
-    return true;
+void playMenu() {
+    printw("We are on the play screen.");
 }
 
 int main() {
 
-    // CURSES BASE SETTINGS:
-    initscr(); // starts curses mode
-    keypad(stdscr, TRUE); // enables reading of F1, F2, arrow keys, etc
-    raw(); // ctrl characters are directly passed to the program without generating a signal
-    noecho();
+    initscr(); // start curses mode
 
-    printw("<F2> - print Hello!\n");
-    printw("<Arrow keys> - simulate movement\n");
-    printw("<q> - Quit\n");
-    printw("<t> - Test example\n");
+    // TODO: new window for the setting descriptins on main menu, new game options, all that sweet stuff
+    //WINDOW *create_newwin(int height, int width, int starty, int starx);
+    //WINDOW *WINDOW_MENU;
+    //delwin(WINDOW_MENU);
 
-    bool terminalIsRunning{true};
+    // base terminal settings:
+    noecho(); // disables echo
+    keypad(stdscr, TRUE); // enables F 1-12 keys, arrow keys
 
-    while (terminalIsRunning) {
-        refresh(); // updates stdscr so we can see the new outputs
-        inputManager();
-        terminalIsRunning = false;
+    printw("Program starting up.\n"
+           "Press anything to continue!\n");
+    refresh(); // actually render previous string
+    getch();
+
+    bool onTitleScreen{TRUE};
+
+    // most functions using coordinates with curses has yx instead of xy thats why i follow this convention
+    int STR_SCREEN_COL = getmaxy(stdscr); // Y
+    int STR_SCREEN_ROW = getmaxx(stdscr); // X
+
+    while (onTitleScreen) {
+        // TODO: clearScreen() goes here! find cool way to do that, maybe ncurses sister libraries?
+        int menuChoice;
+
+        mvprintw(STR_SCREEN_COL / 2, STR_SCREEN_ROW / 2, "1. Play\n"
+                                                         "2. Quit\n");
+        menuChoice = getch();
+
+        switch (menuChoice) {
+            case 1:
+                playMenu();
+                break;
+
+            case 2:
+                printw("Quitting now...");
+                onTitleScreen = false;
+                getch();
+                break;
+
+            default:
+                printw("Choose an option to continue.");
+                break;
+        }
+        onTitleScreen = false;
     }
 
-    endwin(); // ends curses mode
-
-    return 0;
+    endwin(); // end curses mode
+    return 0; // end of program
 }
