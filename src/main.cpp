@@ -1,4 +1,6 @@
 #include <ncurses.h>
+// apperently <panel.h> is already included and linked properly with my current CMake setup
+#include <panel.h>
 
 /*
  *  Things Im interested in:
@@ -17,7 +19,6 @@ void playMenu() {
 }
 
 int main() {
-
     initscr(); // start curses mode
 
     // TODO: new window for the setting descriptins on main menu, new game options, all that sweet stuff
@@ -45,7 +46,8 @@ int main() {
         int menuChoice;
 
         mvprintw(STR_SCREEN_COL / 2, STR_SCREEN_ROW / 2, "1. Play\n"
-                                                         "2. Quit\n");
+                                                         "2. Quit\n"
+        );
         menuChoice = getch();
 
         switch (menuChoice) {
