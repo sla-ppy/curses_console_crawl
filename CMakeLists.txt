@@ -12,5 +12,5 @@ include_directories(${CURSES_INCLUDE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -lpanel")
 
 # ncurses 2/2
-add_executable(curses_console_crawl src/main.cpp)
+add_executable(curses_console_crawl src/main.cpp src/Player.cpp src/Player.h src/Vector2.cpp src/Vector2.h)
 target_link_libraries(curses_console_crawl ${CURSES_LIBRARIES})
